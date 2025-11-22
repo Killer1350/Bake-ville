@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bake Vile — Eatery & Fast Food</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fff6f2;
+      --card:#ffffff;
+      --accent:#ff3b30;   /* vibrant food red */
+      --accent2:#ff9f0a;  /* orange spice */
+      --text:#2b2b2b;
+      --muted:#6b7280;
+    }
+
+    *{box-sizing:border-box;font-family:'Poppins',sans-serif;}
+    body{margin:0;background:var(--bg);color:var(--text);}
+
+    /* HEADER */
+    header{
+      padding:18px 22px;
+      position:sticky;top:0;z-index:50;
+      background:#ffffffdd;
+      backdrop-filter:blur(10px);
+      display:flex;justify-content:space-between;align-items:center;
+      border-bottom:1px solid #00000010;
+    }
+
+    .brand{display:flex;align-items:center;gap:12px;}
+    .logo{
+      width:45px;height:45px;border-radius:50%;
+      background:var(--accent);
+      color:white;font-weight:800;font-size:20px;
+      display:flex;justify-content:center;align-items:center;
+    }
+    nav a{color:var(--text);margin-left:18px;font-weight:500;text-decoration:none;}
+    nav a:hover{color:var(--accent);}
+
+    /* HERO */
+    .hero{
+      padding:80px 25px;
+      display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+      background:url('https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg') center/cover;
+      color:white;text-align:center;
+      border-bottom-left-radius:40px;
+      border-bottom-right-radius:40px;
+    }
+    .hero-text h1{font-size:42px;font-weight:800;line-height:1.1;}
+    .hero-text p{font-size:17px;margin-top:8px;}
+    .btn-main{
+      background:linear-gradient(45deg,var(--accent),var(--accent2));
+      border:none;color:white;padding:12px 25px;border-radius:10px;
+      font-weight:600;margin-top:18px;
+      transition:0.25s;box-shadow:0 8px 20px #00000030;
+    }
+    .btn-main:hover{transform:translateY(-3px);opacity:0.9;}
+
+    /* CATEGORIES */
+    .categories{
+      display:flex;gap:12px;
+      overflow-x:auto;padding:15px 20px;
+      position:sticky;top:75px;background:#fff8f5dd;
+      backdrop-filter:blur(8px);z-index:40;
+    }
+    .cat{
+      padding:10px 18px;border-radius:25px;
+      background:#ffe7df;color:var(--text);cursor:pointer;
+      white-space:nowrap;font-weight:500;
+    }
+    .cat.active{background:var(--accent);color:white;}
+
+    /* SEARCH & SORT */
+    .controls{padding:20px;display:flex;gap:10px;flex-wrap:wrap;}
+    .controls input,.controls select{
+      background:white;border:1px solid #00000015;
+      padding:10px 12px;border-radius:10px;flex:1;color:var(--text);
+    }
+
+    /* MENU GRID */
+    .grid{
+      padding:25px;display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+      gap:20px;
+    }
+
+    .card{
+      background:white;padding:15px;border-radius:18px;
+      box-shadow:0 5px 20px #00000015;
+      transition:0.25s;
+    }
+    .card:hover{transform:translateY(-5px);}
+
+    .card img{
+      width:100%;height:160px;border-radius:14px;object-fit:cover;
+    }
+
+    .price{font-weight:700;margin-top:5px;color:var(--accent);}
+
+    .whatsapp-btn{
+      background:#25d366;border:none;color:white;
+      padding:8px 12px;border-radius:10px;width:100%;font-weight:600;margin-top:6px;
+    }
+
+    /* CART FLOAT BUTTON */
+    #cartBox{
+      position:fixed;right:20px;bottom:20px;
+      background:var(--accent);padding:14px 22px;
+      border-radius:50px;color:white;font-weight:700;
+      box-shadow:0 10px 25px #ff000055;cursor:pointer;
+      z-index:60;font-size:15px;
+    }
+
+    /* MODAL */
+    .modal-backdrop{
+      position:fixed;inset:0;background:#0008;
+      display:none;justify-content:center;align-items:center;
+      backdrop-filter:blur(4px);z-index:100;
+    }
+    .modal-box{
+      background:white;padding:20px;border-radius:18px;
+      width:90%;max-width:380px;
+    }
+
+    footer{text-align:center;padding:25px;margin-top:40px;color:var(--muted);}
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">BV</div>
+    <div><b>Bake Vile</b><br><small style="color:var(--muted)">Fast food • Pastries • Drinks</small></div>
+  </div>
+  <nav>
+    <a href="#menuList">Menu</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  
+</header>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>Fresh meals, fast delivery.<br>Only at Bake Vile.</h1>
+    <p>Delicious fast foods, pastries and chilled drinks — delivered in minutes.</p>
+    <button class="btn-main" onclick="scrollToMenu()">Browse Menu</button>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<div class="categories" id="catTabs"></div>
+
+<!-- SEARCH + SORT -->
+<section class="controls">
+  <input id="q" placeholder="Search meals (burger, pizza…)" oninput="renderMenu()">
+  <select id="sort" onchange="renderMenu()">
+    <option value="default">Sort: Featured</option>
+    <option value="price-asc">Price: Low → High</option>
+    <option value="price-desc">Price: High → Low</option>
+  </select>
+</section>
+
+<!-- MENU GRID -->
+<section id="menuList" class="grid"></section>
+
+<div id="cartBox" onclick="openCart()">Cart (0)</div>
+
+<!-- CART MODAL -->
+<div id="modalBackdrop" class="modal-backdrop">
+  <div class="modal-box" id="cartModalBox"></div>
+</div>
+
+<footer id="about">© Bake Vile — Fresh, Fast & Tasty</footer>
+
+<script>
+  const WHATSAPP_NUMBER = "2348032296993";  
+
+  const CATEGORIES = ["Meals","Pastries","Drinks"];
+
+  const MENU = [
+    {id:1, name:'Cheese Beef Burger', price:3500, img:'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg', cat:'Meals'},
+    {id:2, name:'Pepperoni Pizza Slice', price:2800, img:'https://images.pexels.com/photos/2619967/pexels-photo-2619967.jpeg', cat:'Meals'},
+    {id:3, name:'Glazed Donut Box', price:1800, img:'https://images.pexels.com/photos/3026809/pexels-photo-3026809.jpeg', cat:'Pastries'},
+    {id:4, name:'Strawberry Smoothie', price:2200, img:'image/smothie.png', cat:'Drinks'}
+  ];
+
+  let activeCat = "All";
+  let CART = [];
+
+  function scrollToMenu(){document.getElementById('menuList').scrollIntoView({behavior:'smooth'});}
+
+  function loadCategories(){
+    const node = document.getElementById('catTabs');
+    node.innerHTML = `<div class="cat ${activeCat==='All'?'active':''}" onclick='setCat("All")'>All</div>`;
+    CATEGORIES.forEach(c=>{
+      node.innerHTML += `<div class="cat ${activeCat===c?'active':''}" onclick='setCat("${c}")'>${c}</div>`;
+    });
+  }
+
+  function setCat(c){activeCat=c;loadCategories();renderMenu();}
+
+  function renderMenu(){
+    const q = document.getElementById('q').value.toLowerCase();
+    const sort = document.getElementById('sort').value;
+
+    let arr = MENU.filter(
+      i => i.name.toLowerCase().includes(q) && (activeCat==="All" || i.cat===activeCat)
+    );
+
+    if(sort==='price-asc') arr.sort((a,b)=>a.price-b.price);
+    if(sort==='price-desc') arr.sort((a,b)=>b.price-a.price);
+
+    const grid = document.getElementById('menuList');
+    grid.innerHTML = '';
+
+    arr.forEach(item=>{
+      grid.innerHTML += `
+        <div class="card">
+          <img src="${item.img}">
+          <h5 style="margin-top:8px">${item.name}</h5>
+          <div class="price">₦${item.price}</div>
+          <button class="btn-main" style="width:100%" onclick='addToCart(${item.id})'>Add to Cart</button>
+          <button class="whatsapp-btn" onclick='orderWhatsapp("${item.name}",${item.price})'>Order via WhatsApp</button>
+        </div>
+      `;
+    });
+  }
+
+  function orderWhatsapp(name, price){
+    const msg = `Hello! I want to order:\n${name}\nPrice: ₦${price}`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
+  }
+
+  function addToCart(id){
+    const item = MENU.find(i=>i.id===id);
+    CART.push(item);
+    document.getElementById('cartBox').innerText = `Cart (${CART.length})`;
+  }
+
+  function openCart(){
+    const modal = document.getElementById('modalBackdrop');
+    const box = document.getElementById('cartModalBox');
+    modal.style.display='flex';
+
+    let html = `<h4>Your Cart</h4>`;
+    let total = 0;
+
+    CART.forEach(i=>{
+      total += i.price;
+      html += `<div>${i.name} — ₦${i.price}</div>`;
+    });
+
+    html += `<hr><b>Total: ₦${total}</b><br><br>`;
+    html += `<button class='btn-main' style='width:100%' onclick='checkoutWhatsapp(${total})'>Checkout via WhatsApp</button>`;
+    html += `<button class='btn-main' style='width:100%;background:#ddd;color:black;margin-top:8px' onclick='closeModal()'>Close</button>`;
+
+    box.innerHTML = html;
+  }
+
+  function checkoutWhatsapp(total){
+    let msg = "Hello! I want to place an order:\n\n";
+
+    CART.forEach(i=>{
+      msg += `• ${i.name} — ₦${i.price}\n`;
+    });
+
+    msg += `\nTOTAL: ₦${total}`;
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
+  }
+
+  function closeModal(){
+    document.getElementById('modalBackdrop').style.display='none';
+  }
+
+  loadCategories();
+  renderMenu();
+
+</script>
+
+</body>
+</html>
